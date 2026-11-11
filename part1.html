@@ -48,9 +48,27 @@
         // Step 1: Create a Linear Scale function to map population to SVG units
         // See https://d3js.org/d3-scale/linear#_linear
 
+        let popScale = d3.scaleLinear([0, 9210000], [0, 200]);
+
+        let yAttr = 0;
+        let textYAttr = 12;
         // note: for-of is akin to a Python for-in loop
         for (let city of cities) {
           // Step 2: append a rect & text element for each one
+          div10
+            .append("rect")
+            .attr("height", 15)
+            .attr("width", popScale(city.population))
+            .attr("y", yAttr);
+
+          div10
+            .append("text")
+            .text(city.city)
+            .attr("y", textYAttr)
+            .style("fill", "#ffffff");
+
+          yAttr += 20;
+          textYAttr += 20;
         }
       </script>
     </section>
@@ -68,7 +86,7 @@
       </div>
 
       <script>
-        /* 
+        /*
          The cities variable from above is still in scope.
 
          Now instead of a for loop you will use data joins to add
@@ -88,7 +106,29 @@
           .attr("viewBox", "0 0 200 100");
 
         // WRITE SOLUTION TO 1.1 BELOW
-        d3.selectAll("rect");
+        div11
+          .selectAll("rect")
+          .data(cities)
+          .join("rect")
+          .attr("y", function (d, i) {
+            return i * 20;
+          })
+          .attr("height", 15)
+          .attr("width", function (d, i) {
+            return popScale(d.population);
+          });
+
+        div11
+          .selectAll("text")
+          .data(cities)
+          .join("text")
+          .text(function (d, i) {
+            return d.city;
+          })
+          .attr("y", function (d, i) {
+            return i * 20 + 12;
+          })
+          .style("fill", "#ffffff");
       </script>
     </section>
 
